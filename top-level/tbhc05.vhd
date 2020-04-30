@@ -1,11 +1,10 @@
-
 library ieee;
 use ieee.std_logic_1164.all;
 
 entity tbhc05 is
 end tbhc05;
 
-architecture arch_tbhc05 of top is
+architecture arch_tbhc05 of tbhc05 is
 
 component top
 port (
@@ -29,7 +28,7 @@ geraclk: process
 begin
   clk<='0';
   wait for PERIODO/2; -- 50ns
-  ckl<='1';
+  clk<='1';
   wait for PERIODO/2; --50 ns
 end process;
 

@@ -22,15 +22,15 @@ signal ram:ram_type;
 begin
   process (clk,rst)
   begin
-    if rst='1' then
+    if rst<='1' then
       -- carregamento de software
-      ram(0) <= "01001100" --INC A (4C)
-      ram(1) <= "01001100" --INC A (4C)
-      ram(2) <= "01001100" --INC A (4C)
-      ram(3) <= "01001010" --DEC A (4A)
+      ram(0) <= "01001100"; --INC A (4C)
+      ram(1) <= "01001100"; --INC A (4C)
+      ram(2) <= "01001100"; --INC A (4C)
+      ram(3) <= "01001010"; --DEC A (4A)
 
-    elsif clk'event and clk='1' then
-      if rw='1' then --escrita
+    elsif clk'event and clk<='1' then
+      if rw<='1' then --escrita
         ram (to_integer(unsigned(addr))) <= din;
       end if;
     end if;

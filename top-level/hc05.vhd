@@ -1,4 +1,4 @@
-library ieee;
+﻿library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
@@ -6,7 +6,7 @@ entity hc05 is
 port (
   clk:  in std_logic;
   rst:  in std_logic;
-  dout: in std_logic_vector(7 downto 0)
+  dout: in std_logic_vector(7 downto 0);
   rw:   out std_logic;
   addr: out std_logic_vector(7 downto 0);
   din:  out std_logic_vector(7 downto 0);
@@ -29,8 +29,9 @@ constant EXECUTA: std_logic_vector(2 downto 0):="100";
 signal A: std_logic_vector(7 downto 0);
 signal PC: std_logic_vector(7 downto 0);
 
---Código da instroção (Registrador de instroção)
+--CÃ³digo da instroÃ§Ã£o (Registrador de instroÃ§Ã£o)
 signal opcode: std_logic_vector(7 downto 0);
+signal fase: std_logic_vector(7 downto 0);
 
 begin
   addr <= PC;
@@ -53,7 +54,7 @@ begin
         when RESET2 =>
           estado <= BUSCA;
         when BUSCA =>
-          opcode <= dout; --Recebe cod. da instrução
+          opcode <= dout; --Recebe cod. da instruÃ§Ã£o
           estado <= DECODE;
         when DECODE =>
           case opcode is
@@ -63,13 +64,18 @@ begin
             when "01001010" => --- decrementa A(4A)
               A <= A - 1;
               estado <= EXECUTA;
+            when "10100110" => --- decrementa A(A6)
+              PC <= PC + 1; -- proxima posição da memoria
+              A <= dout; -- armazena dado
+              estado <= EXECUTA;
             when others=> null;
           end case;
         when EXECUTA =>
-          PC <= PC + 1; --- Próxima instrução
+          PC <= PC + 1; --- PrÃ³xima instruÃ§Ã£o
           estado <= BUSCA;
         when others => estado <= RESET1;
       end case;
     end if;
   end process;
 end arch_hc05;
+
