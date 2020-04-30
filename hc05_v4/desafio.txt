@@ -1,0 +1,26 @@
+      -- Nome de todos do grupo.
+  
+      Desafio em Grupo
+	  ___________________
+	  
+	  Implementar as instruções de [JE] -- hoje
+	  depois ... JL,JG,JLE,JGE
+	  
+	  Fazer um programa conte de 0 a 9
+	  
+	  -- A inicia em zero
+	  la: INC A
+		  CMP 09
+		  JE fim
+          JMP la
+	 fim: DEC A
+	      DEC A
+		  
+	  ___________________
+	  Simular: dar print da simulacao
+	  Subir no classroom [até final aula]
+	  
+      
+	  
+	  
+                 		 
