@@ -34,6 +34,6 @@ begin
         ram (to_integer(unsigned(addr))) <= din;
       end if;
     end if;
-  process;
+  end process;
   dout <= ram (to_integer(unsigned(addr)));
 end arch_ram;

@@ -40,6 +40,9 @@ begin
     if rst='1' then
       A <= (others=>'0');
       PC <= (others=>'0');
+      rw <= '0';
+      din <= (others=>'0');
+      opcode <= (others=>'0');
       estado <= RESET1;
     elsif clk'event and clk='1' then
       case estado is
