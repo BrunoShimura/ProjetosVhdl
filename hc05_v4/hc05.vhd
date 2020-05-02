@@ -2,7 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
 
-ENTITY hc05 IS 
+ENTITY hc05 IS
 port (
       clk: in std_logic;
 	  rst: in std_logic;
@@ -39,14 +39,14 @@ signal fase: std_logic_vector(1 downto 0);
 signal aux_dado:std_logic_vector(3 downto 0); -- switch
 
 -- status (CMP)
-signal status: std_logic_vector (4 downto 0); 
+signal status: std_logic_vector (4 downto 0);
 -- | =(0), <(1), >(2), <=(3), >=(4)
 
 begin
 
     addr <= PC;
 	led <= A;
-	
+
 	process(clk,rst)
 	begin
 	     if rst='1' then
@@ -83,7 +83,7 @@ begin
 								PC <= PC+1; -- prox. posicao
 								fase <= "01";
 							 else
-								A <= dout;  -- armazena dado	
+								A <= dout;  -- armazena dado
 								estado <= EXECUTA;
 							 end if;
 						when "00100000"  => -- JMP(IME)(20) -- BRA
@@ -91,7 +91,7 @@ begin
 								PC <= PC+1; -- prox. posicao
 								fase <= "01";
 							 else
-								PC <= dout;  -- armazena dado	
+								PC <= dout;  -- armazena dado
 								estado <= BUSCA;
 								fase <= "00";
 							 end if;
@@ -106,14 +106,14 @@ begin
 								   fase <= "00";
 							    else -- nao saltar
 									estado <= EXECUTA;
-								end if;								   
+								end if;
 							 end if;
 						when "10101011"  => -- ADD(IME)(AB)
 							 if fase="00" then
 								PC <= PC+1; -- prox. posicao
 								fase <= "01";
 							 else
-								A <= A+dout;  -- armazena dado	
+								A <= A+dout;  -- armazena dado
 								estado <= EXECUTA;
 							 end if;
 						when "10100000"  => -- SUB(IME)(A0)
@@ -121,12 +121,12 @@ begin
 								PC <= PC+1; -- prox. posicao
 								fase <= "01";
 							 else
-								A <= A-dout;  -- armazena dado	
+								A <= A-dout;  -- armazena dado
 								estado <= EXECUTA;
 							 end if;
 						when "00100101"	 --25 (ler dado/switch)
 						     if fase="00" then
-							    if enter='1' then 
+							    if enter='1' then
 								   aux_dado <= dado;
 								   fase <= "01";
 								end if;
@@ -145,7 +145,7 @@ begin
 								din <= A; -- dado a ser escrito
 								fase <= "10";
 							 elsif fase="10" then
-								RW <= '1'; -- escrever 
+								RW <= '1'; -- escrever
 								fase <= "11";
 							 else
 						        RW <= '0';	-- leitura
@@ -164,7 +164,7 @@ begin
 								if A = dout then    --igual(JE/JNE)
 								   status(0)<= '1';
 								end if;
-								if A < dout then	
+								if A < dout then
 									status(1)<= '1'; -- menor (JL)
 								end if;
 								if A > dout then	-- maior (JG)
@@ -178,7 +178,21 @@ begin
 								end if;
 								estado <= EXECUTA;
 							 end if;
-                        when others=> null;						
+
+						when "00101000"  => -- JE(IME)(28) -- BRE
+							 if fase="00" then
+								PC <= PC+1; -- prox. posicao
+								fase <= "01";
+							 else
+                   if status(0)='1' then
+								   PC <= dout;  -- prox. end.
+								   estado <= BUSCA;
+								   fase <= "00";
+							    else -- nao saltar
+									estado <= EXECUTA;
+								end if;
+							 end if;
+                        when others=> null;
 					  end case;
 				when EXECUTA =>
 					 fase <= "00";
